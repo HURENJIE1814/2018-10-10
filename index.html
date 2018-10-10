@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0035)http://fgm.cc/learn/lesson6/01.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<title>完美拖拽</title>
+<style type="text/css">
+html,body{overflow:hidden;}
+body,div,h2,p{margin:0;padding:0;}
+body{color:#fff;background:#000;font:12px/2 Arial;}
+#box{position:absolute;width:300px;height:150px;background:#333;border:2px solid #ccc;top:50%;left:50%;margin:-75px 0 0 -150px;}
+#box h2{height:25px;cursor:move;background:#222;border-bottom:2px solid #ccc;text-align:right;padding:0 10px;}
+#box h2 a{color:#fff;font:12px/25px Arial;text-decoration:none;outline:none;}
+</style>
+</head>
+<body>
+<div id="box" style="margin-left: 0px; margin-top: 0px; left: 533px; top: 231px;">
+    <h2><a href="javascript:;">点击回放拖动轨迹</a></h2>
+</div>
+</body>
+<script>
+    var oBox=document.getElementById("box")
+	var oH2=oBox.children[0]
+	
+	
+	var pointArray=[]
+	
+	oH2.onmousedown=function(event){
+				
+		var e=event||window.event
+		var clientHeight=e.clientHeight
+		var offsetx=e.offsetX
+		var offsety=e.offsetY
+		pointArray.push({
+			x:oBox.offsetLeft,
+			y:oBox.offsetTop			
+	     })
+		 document.onmousemove=function(event){
+			 var e=event||window.event
+			 var clientX=e.clientX
+			 var clientY=e.clientY
+			 
+			 oBox.style.left=clientX - offsetx + "px"
+			 oBox.style.top=clientY - offsety + "px"
+			 
+			 var point={
+				 x:clientX - offsetx,
+				 y:clientY - offsety
+			 }
+			 pointArray.push(point)
+		   }
+		 }
+		 
+		 oBox.onmouseup=function(){
+			document. onmousemove=null
+		}
+		
+		var oA=oH2.children[0]
+		var timer=null
+		oA.onclick=function(){
+			var i=pointArray.length
+			timer=setInterval(function(){
+				i--
+				oBox.style.left=pointArray[i].x+"px"
+				oBox.style.top=pointArray[i].y+"px"
+				if(i==0){
+					clearInterval(timer)
+					pointArray.length=0
+				}
+			},100)
+		}
+	
+</script>
+</html>
